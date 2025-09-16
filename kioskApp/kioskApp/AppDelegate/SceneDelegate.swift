@@ -1,10 +1,3 @@
-//
-//  SceneDelegate.swift
-//  kioskApp
-//
-//  Created by 신서연 on 9/16/25.
-//
-
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {

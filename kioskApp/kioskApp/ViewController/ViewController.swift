@@ -39,8 +39,14 @@ final class ViewController: UIViewController {
             make.leading.trailing.equalToSuperview()
             make.bottom.equalTo(mainOrderButton.snp.top)   // 버튼 위까지
         }
-
         collectionView.dataSource = self
+
+        // (임시) 장바구니 버튼 — 필요 없으면 삭제해도 됨
+        let btn = UIButton(type: .system)
+        view.addSubview(btn)
+        btn.frame = .init(x: 10, y: 100, width: 200, height: 100)
+        btn.setTitle("(임시) 장바구니 버튼", for: .normal)
+        btn.addTarget(self, action: #selector(presentModalBtnTap), for: .touchUpInside)
     }
 
     override func viewDidLayoutSubviews() {
@@ -59,6 +65,24 @@ final class ViewController: UIViewController {
         flow.minimumInteritemSpacing = inter
         flow.minimumLineSpacing = line
         flow.sectionInset = UIEdgeInsets(top: 12, left: insetLR, bottom: 24, right: insetLR)
+    }
+
+    // 결제창 하프모달뷰
+    @objc private func presentModalBtnTap() {
+        let paySheet = UIViewController()
+
+        let popUpView = PaymentPopUp()
+        paySheet.view.addSubview(popUpView)
+        popUpView.snp.makeConstraints { $0.edges.equalToSuperview() }
+
+        paySheet.modalPresentationStyle = .pageSheet
+        if let sheet = paySheet.sheetPresentationController {
+            sheet.detents = [.medium()]
+            sheet.preferredCornerRadius = 30
+            sheet.prefersGrabberVisible = true
+        }
+
+        present(paySheet, animated: true, completion: nil)
     }
 }
 

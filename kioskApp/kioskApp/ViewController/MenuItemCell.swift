@@ -38,8 +38,9 @@ class MenuItemCell: UICollectionViewCell {
     required init?(coder: NSCoder) { fatalError() }
 
     func configure(_ item: MenuItem) {
+        imageView.image = UIImage(named: item.imageName)
         nameLabel.text = item.name
-        priceLabel.text = "\(item.price)"
+        priceLabel.text = "\(item.price.formatted())원"
     }
 }
 

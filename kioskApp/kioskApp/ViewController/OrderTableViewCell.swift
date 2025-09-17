@@ -1,6 +1,3 @@
-// UIStepper 각 아이템당 10개 이하
-// 테이블뷰셀 스와이프로 삭제
-
 import UIKit
 import SnapKit
 

@@ -2,13 +2,12 @@ import UIKit
 import SnapKit
 
 final class ViewController: UIViewController {
-    // feature/#5
+
     private let mainCategoryTab = MainCategoryTab()
     private let mainOrderButton = MainOrderButton()
     
-    // develop
     private var collectionView: UICollectionView!
-    private let items = sampleMenuItems
+    private let items = allItems
 
     override func viewDidLoad() {
         super.viewDidLoad()

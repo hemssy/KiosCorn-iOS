@@ -2,17 +2,43 @@ import UIKit
 import SnapKit
 
 final class ViewController: UIViewController {
+    // feature/#5
+    private let mainCategoryTab = MainCategoryTab()
+    private let mainOrderButton = MainOrderButton()
+    
+    // develop
     private var collectionView: UICollectionView!
     private let items = sampleMenuItems
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .systemBackground
 
+        // 상단 카테고리 탭
+        view.addSubview(mainCategoryTab)
+        mainCategoryTab.snp.makeConstraints { make in
+            make.top.leading.trailing.equalToSuperview()
+            make.height.equalTo(150)
+        }
+
+        // 하단 주문 버튼
+        view.addSubview(mainOrderButton)
+        mainOrderButton.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.height.equalTo(63)
+        }
+
+        // 컬렉션뷰
         let layout = UICollectionViewFlowLayout()
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(MenuItemCell.self, forCellWithReuseIdentifier: MenuItemCell.id)
         view.addSubview(collectionView)
-        collectionView.snp.makeConstraints { $0.edges.equalToSuperview() }
+        collectionView.snp.makeConstraints { make in
+            make.top.equalTo(mainCategoryTab.snp.bottom)   // 탭 아래
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalTo(mainOrderButton.snp.top)   // 버튼 위까지
+        }
 
         collectionView.dataSource = self
     }
@@ -21,7 +47,7 @@ final class ViewController: UIViewController {
         super.viewDidLayoutSubviews()
         guard let flow = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
 
-        // 피그마에서 정한 마진,간격 + 정했던 셀 비율(160x216)
+        // 피그마에서 정한 마진/간격 + 셀 비율(160x216)
         let insetLR: CGFloat = 29
         let inter: CGFloat   = 23
         let line: CGFloat    = 35
@@ -40,6 +66,7 @@ extension ViewController: UICollectionViewDataSource {
     func collectionView(_ cv: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         items.count
     }
+
     func collectionView(_ cv: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = cv.dequeueReusableCell(withReuseIdentifier: MenuItemCell.id, for: indexPath) as! MenuItemCell
         cell.configure(items[indexPath.item])

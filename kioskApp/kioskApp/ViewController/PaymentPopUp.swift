@@ -1,4 +1,4 @@
-// 결제창 UI
+// PaymentPopUp.swift
 
 import Foundation
 import UIKit
@@ -13,8 +13,8 @@ class PaymentPopUp: UIView {
     let tableView = UITableView()
     
     // 총 수량/금액 표시용
-    let stackView = UIStackView()
-    let vStackView = UIStackView()
+    let titleStack = UIStackView()
+    let valueStack = UIStackView()
     let totalCount = UILabel()
     let totalPrice = UILabel()
     let hStackView = UIStackView()
@@ -46,9 +46,7 @@ class PaymentPopUp: UIView {
     ]
     
     private var totalNumCount = 0 {
-        didSet {
-            totalCount.text = "\(totalNumCount)"
-        }
+        didSet { totalCount.text = "\(totalNumCount)" }
     }
     
     required init?(coder: NSCoder) {
@@ -57,21 +55,19 @@ class PaymentPopUp: UIView {
     
     // 테이블뷰 레이아웃
     func tableConfigure() {
-        self.addSubview(tableView)
+        addSubview(tableView)
         
         tableView.rowHeight = 85
         tableView.backgroundColor = .white
         tableView.layer.cornerRadius = 10
         tableView.snp.makeConstraints {
-            $0.width.equalTo(370)
-            $0.height.equalTo(197)
-            $0.leading.equalToSuperview().inset(16)
-            $0.trailing.equalToSuperview().offset(-16)
             $0.top.equalToSuperview().inset(30)
+            $0.leading.trailing.equalToSuperview().inset(16)
+            $0.height.equalTo(197)
         }
         
-        self.tableView.register(OrderTableViewCell.self,
-                                forCellReuseIdentifier: OrderTableViewCell.identifier)
+        tableView.register(OrderTableViewCell.self,
+                           forCellReuseIdentifier: OrderTableViewCell.identifier)
     }
     
     func setTableViewDelegate() {
@@ -79,66 +75,74 @@ class PaymentPopUp: UIView {
         tableView.delegate = self
     }
     
-    // 스와이프시 셀 삭제
+    // 스와이프 삭제
     func tableView(_ tableView: UITableView,
                    trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath)
     -> UISwipeActionsConfiguration? {
-        
-        let action = UIContextualAction(style: .destructive, title: nil) { [weak self](action, view, completion) in
+        let action = UIContextualAction(style: .destructive, title: nil) { [weak self] _, _, completion in
             guard let self = self else { return }
             self.datas.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .automatic)
+            self.updateSummary()
             completion(true)
         }
-        
         action.image = UIImage(systemName: "trash")
-        let configuration = UISwipeActionsConfiguration(actions: [action])
-        configuration.performsFirstActionWithFullSwipe = true
-        return configuration
+        return UISwipeActionsConfiguration(actions: [action])
     }
     
     // 수량 / 가격 스택뷰
     func stackConfigure() {
-        self.addSubview(hStackView)
-        [vStackView, stackView].forEach { hStackView.addArrangedSubview($0) }
-        
+        addSubview(hStackView)
         hStackView.axis = .horizontal
-        hStackView.spacing = 170
+        hStackView.alignment = .center
+        hStackView.distribution = .fill
+        hStackView.spacing = 8
         hStackView.snp.makeConstraints {
-            $0.top.equalTo(tableView.snp.bottom).offset(40)
+            $0.top.equalTo(tableView.snp.bottom).offset(24)
             $0.leading.trailing.equalToSuperview().inset(26)
         }
         
-        // 텍스트 라벨
+        // 왼쪽 타이틀
         let total = UILabel()
-        let orderPrice = UILabel()
         total.text = "총 수량"
+        total.font = .systemFont(ofSize: 16, weight: .medium)
+        
+        let orderPrice = UILabel()
         orderPrice.text = "결제 금액"
-        [total, orderPrice].forEach { stackView.addArrangedSubview($0) }
+        orderPrice.font = .systemFont(ofSize: 16, weight: .medium)
         
-        stackView.axis = .vertical
-        stackView.spacing = 10
+        titleStack.axis = .vertical
+        titleStack.spacing = 10
+        [total, orderPrice].forEach { titleStack.addArrangedSubview($0) }
         
-        // 숫자 라벨
-        [totalCount, totalPrice].forEach { vStackView.addArrangedSubview($0) }
-        vStackView.axis = .vertical
-        vStackView.spacing = 10
-        vStackView.alignment = .trailing
-        
+        // 오른쪽 숫자
         totalCount.text = "0"
-        totalCount.font = .systemFont(ofSize: 16)
-        totalPrice.text = "₩"
-        totalPrice.font = .systemFont(ofSize: 16)
+        totalCount.font = .systemFont(ofSize: 16, weight: .bold)
+        totalCount.textAlignment = .right
+        
+        totalPrice.text = "₩0"
+        totalPrice.font = .systemFont(ofSize: 16, weight: .bold)
+        totalPrice.textAlignment = .right
+        
+        valueStack.axis = .vertical
+        valueStack.spacing = 10
+        [totalCount, totalPrice].forEach { valueStack.addArrangedSubview($0) }
+        
+        hStackView.addArrangedSubview(titleStack)
+        hStackView.addArrangedSubview(valueStack)
+        
+        // 좌우 비율 맞추기
+        titleStack.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        valueStack.setContentHuggingPriority(.required, for: .horizontal)
     }
     
-    // 메인 레이아웃
+    // 메인 레이아웃 (버튼 바)
     func mainConfigure() {
         [paymentPop, buttonBar].forEach { addSubview($0) }
         paymentPop.backgroundColor = UIColor(named: "DefaultColor")
         paymentPop.snp.makeConstraints { $0.edges.equalToSuperview() }
         sendSubviewToBack(paymentPop)
         
-        // 버튼 스택뷰
         buttonBar.axis = .horizontal
         buttonBar.alignment = .fill
         buttonBar.distribution = .fillEqually
@@ -146,8 +150,8 @@ class PaymentPopUp: UIView {
         [cancelButton, callStaffButton, payButton].forEach { buttonBar.addArrangedSubview($0) }
         
         buttonBar.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.bottom.equalToSuperview().inset(35)
+            $0.leading.trailing.equalToSuperview().inset(26)
+            $0.bottom.equalTo(self.safeAreaLayoutGuide).inset(16)
             $0.top.equalTo(hStackView.snp.bottom).offset(23)
             $0.height.equalTo(46)
         }
@@ -173,22 +177,16 @@ class PaymentPopUp: UIView {
         payButton.layer.cornerRadius = 8
     }
     
-    private func updateTotalCount() {
-        totalNumCount = datas.reduce(into: 0) { $0 += $1.count }
-    }
-    
-    private func updateTotalPrice() {
-        let sum = datas.reduce(into: 0) { result, data in
-            result += data.count * data.price
-        }
-        self.totalPrice.text = "\(self.formatPrice(sum))원"
+    // 합계 갱신
+    private func updateSummary() {
+        totalNumCount = datas.reduce(0) { $0 + $1.count }
+        let sum = datas.reduce(0) { $0 + ($1.price * $1.count) }
+        totalPrice.text = "₩\(formatPrice(sum))"
     }
     
     func formatPrice(_ price: Int) -> String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
-        formatter.groupingSeparator = ","
-        formatter.locale = Locale(identifier: "ko")
         return formatter.string(from: NSNumber(value: price)) ?? "\(price)"
     }
 }
@@ -212,8 +210,7 @@ extension PaymentPopUp: UITableViewDataSource, UITableViewDelegate {
         cell.onCountChanged = { [weak self] newCount in
             guard let self = self else { return }
             self.datas[indexPath.row].count = newCount
-            self.updateTotalPrice()
-            self.updateTotalCount()
+            self.updateSummary()
         }
         return cell
     }

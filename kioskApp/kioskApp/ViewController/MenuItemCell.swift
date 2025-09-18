@@ -7,6 +7,7 @@ class MenuItemCell: UICollectionViewCell {
     private let imageView = UIImageView()
     private let nameLabel = UILabel()
     private let priceLabel = UILabel()
+    private let cartAddButton = UIButton()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -17,10 +18,13 @@ class MenuItemCell: UICollectionViewCell {
 
         nameLabel.font = .systemFont(ofSize: 14, weight: .regular)
         priceLabel.font = .systemFont(ofSize: 16, weight: .regular)
+        
+        cartAddButton.setImage(UIImage(named: "buttonCartAdd"), for: .normal)
 
         contentView.addSubview(imageView)
         contentView.addSubview(nameLabel)
         contentView.addSubview(priceLabel)
+        contentView.addSubview(cartAddButton)
 
         imageView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
@@ -33,6 +37,12 @@ class MenuItemCell: UICollectionViewCell {
         priceLabel.snp.makeConstraints {
             $0.top.equalTo(nameLabel.snp.bottom).offset(2)
             $0.leading.trailing.bottom.equalToSuperview()
+        }
+        cartAddButton.snp.makeConstraints {
+            $0.width.equalTo(30)
+            $0.height.equalTo(30)
+            $0.top.equalTo(imageView.snp.bottom).offset(18)
+            $0.trailing.equalToSuperview()
         }
     }
     required init?(coder: NSCoder) { fatalError() }

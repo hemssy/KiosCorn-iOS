@@ -28,6 +28,8 @@ let allItems: [MenuItem] = [
     .init(name: "나쵸콤보", price: 16900, imageName: "combo04", category: .combo),
     .init(name: "비어세트", price: 15900, imageName: "combo05", category: .combo),
     .init(name: "핫도그콤보", price: 15900, imageName: "combo06", category: .combo),
+    .init(name: "스키피콤보", price: 14900, imageName: "combo07", category: .combo),
+    .init(name: "더블콤보", price: 15900, imageName: "combo08", category: .combo),
     
     .init(name: "구운양파팝콘L", price: 8500, imageName: "popcorn01", category: .popcorn),
     .init(name: "구운양파팝콘R", price: 7500, imageName: "popcorn02", category: .popcorn),
@@ -35,6 +37,8 @@ let allItems: [MenuItem] = [
     .init(name: "스키피땅콩버터팝콘R", price: 7500, imageName: "popcorn04", category: .popcorn),
     .init(name: "더블카라멜&치즈팝콘", price: 6900, imageName: "popcorn05", category: .popcorn),
     .init(name: "팝콘", price: 5500, imageName: "popcorn06", category: .popcorn),
+    .init(name: "반반팝콘R", price: 7500, imageName: "popcorn07", category: .popcorn),
+    .init(name: "갈릭팝콘포대", price: 13900, imageName: "popcorn08", category: .popcorn),
     
     .init(name: "통찡어", price: 11900, imageName: "snack01", category: .snack),
     .init(name: "크림새우", price: 10900, imageName: "snack02", category: .snack),
@@ -42,6 +46,8 @@ let allItems: [MenuItem] = [
     .init(name: "순살치킨", price: 9500, imageName: "snack04", category: .snack),
     .init(name: "포테이토", price: 6500, imageName: "snack05", category: .snack),
     .init(name: "포테이토앤소시지", price: 6900, imageName: "snack06", category: .snack),
+    .init(name: "핫도그", price: 5500, imageName: "snack07", category: .snack),
+    .init(name: "더블후라이드소시지", price: 6500, imageName: "snack08", category: .snack),
     
     .init(name: "탄산", price: 3900, imageName: "drink01", category: .drinks),
     .init(name: "망고밀크쉐이크", price: 7900, imageName: "drink02", category: .drinks),
@@ -49,5 +55,7 @@ let allItems: [MenuItem] = [
     .init(name: "커피쉐이크", price: 6900, imageName: "drink04", category: .drinks),
     .init(name: "밀크쉐이크", price: 6900, imageName: "drink05", category: .drinks),
     .init(name: "오렌지에이드", price: 5900, imageName: "drink06", category: .drinks),
+    .init(name: "자몽에이드", price: 5900, imageName: "drink07", category: .drinks),
+    .init(name: "ICE멜론소다", price: 5900, imageName: "drink08", category: .drinks),
 ]
 

@@ -7,7 +7,7 @@ class MainOrderButton: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        configureButton()
+        configureButton(nil)
         
     }
     
@@ -15,7 +15,7 @@ class MainOrderButton: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func configureButton() {
+     func configureButton(_ vc: ViewController?) {
         
         addSubview(orderButton)
         orderButton.backgroundColor = UIColor(named: "#FDF6F6")
@@ -24,6 +24,7 @@ class MainOrderButton: UIView {
         // `NSMutableAttributedString`적용?
         orderButton.setTitle("🍿2개 주문하기", for: .normal)
         orderButton.setTitleColor(.black, for: .normal)
+        orderButton.addTarget(vc,  action: #selector(ViewController.presentModalBtnTap), for: .touchUpInside)
         orderButton.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }

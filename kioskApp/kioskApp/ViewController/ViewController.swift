@@ -22,6 +22,7 @@ final class ViewController: UIViewController {
 
         // 하단 주문 버튼
         view.addSubview(mainOrderButton)
+        mainOrderButton.configureButton(self)
         mainOrderButton.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
             make.bottom.equalToSuperview()
@@ -40,12 +41,7 @@ final class ViewController: UIViewController {
         }
         collectionView.dataSource = self
 
-        // (임시) 장바구니 버튼 — 필요 없으면 삭제해도 됨
-        let btn = UIButton(type: .system)
-        view.addSubview(btn)
-        btn.frame = .init(x: 10, y: 100, width: 200, height: 100)
-        btn.setTitle("(임시) 장바구니 버튼", for: .normal)
-        btn.addTarget(self, action: #selector(presentModalBtnTap), for: .touchUpInside)
+        
     }
 
     override func viewDidLayoutSubviews() {
@@ -67,7 +63,7 @@ final class ViewController: UIViewController {
     }
 
     // 결제창 하프모달뷰
-    @objc private func presentModalBtnTap() {
+    @objc func presentModalBtnTap(_ sender: UIButton) {
         let paySheet = UIViewController()
 
         let popUpView = PaymentPopUp()

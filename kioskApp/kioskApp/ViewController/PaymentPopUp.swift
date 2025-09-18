@@ -75,18 +75,47 @@ class PaymentPopUp: UIView {
        }
     
     
+    
     /*
      기본 레이아웃 설정
      */
     func mainConfigure() {
-        [paymentPop]
+        [paymentPop, cancelButton, payButton]
             .forEach { self.addSubview($0) }
         paymentPop.backgroundColor = UIColor(named: "DefaultColor")
         
         paymentPop.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
+        
+        // 취소 버튼
+        cancelButton.setTitle("취소", for: .normal)
+        cancelButton.setTitleColor(.black, for: .normal)
+        cancelButton.backgroundColor = .white
+        cancelButton.layer.cornerRadius = 8
+        cancelButton.layer.borderWidth = 1
+        cancelButton.layer.borderColor = UIColor.black.cgColor
+        cancelButton.snp.makeConstraints {
+            $0.width.equalTo(165)
+            $0.height.equalTo(52)
+            $0.leading.equalToSuperview().inset(24)
+            $0.bottom.equalToSuperview().offset(-35)
+            // $0.center.equalToSuperview()
+        }
+        
+        // 결제 버튼
+        payButton.setTitle("결제", for: .normal)
+        payButton.setTitleColor(.white, for: .normal)
+        payButton.backgroundColor = UIColor(named: "PointColor")
+        payButton.layer.cornerRadius = 8
+        payButton.snp.makeConstraints {
+            $0.width.equalTo(165)
+            $0.height.equalTo(52)
+            $0.trailing.equalToSuperview().offset(-24)
+            $0.bottom.equalToSuperview().offset(-35)
+        }
     }
+    
 }
 
 

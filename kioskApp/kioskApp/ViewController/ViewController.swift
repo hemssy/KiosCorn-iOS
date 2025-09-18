@@ -8,6 +8,7 @@ final class ViewController: UIViewController {
     
     private var collectionView: UICollectionView!
     private let items = allItems
+    private var filteredItems: [MenuItem] = [] //필터된 아이템을 따로 저장함
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,6 +20,17 @@ final class ViewController: UIViewController {
             make.top.leading.trailing.equalToSuperview()
             make.height.equalTo(150)
         }
+        
+        // 카테고리 버튼 눌렸을 때 동작 연결
+        mainCategoryTab.onCategorySelected = { [weak self] category in
+            guard let self = self else { return }
+            self.filteredItems = self.items.filter { $0.category == category }
+            self.collectionView.reloadData()
+        }
+        
+        // 앱 처음 켜졌을 때 기본으로 콤보필터 끼고있음
+        filteredItems = items.filter { $0.category == .combo }
+        
 
         // 하단 주문 버튼
         view.addSubview(mainOrderButton)
@@ -83,12 +95,12 @@ final class ViewController: UIViewController {
 
 extension ViewController: UICollectionViewDataSource {
     func collectionView(_ cv: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        items.count
+        filteredItems.count
     }
 
     func collectionView(_ cv: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = cv.dequeueReusableCell(withReuseIdentifier: MenuItemCell.id, for: indexPath) as! MenuItemCell
-        cell.configure(items[indexPath.item])
+        cell.configure(filteredItems[indexPath.item])
         return cell
     }
 }

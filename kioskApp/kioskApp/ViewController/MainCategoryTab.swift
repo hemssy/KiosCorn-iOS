@@ -7,6 +7,7 @@ class MainCategoryTab: UIView {
     private let logoImage = UIImageView()
     private let categoryTab = UIStackView()
     
+    var onCategorySelected: ((Category) -> Void)?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -91,6 +92,15 @@ class MainCategoryTab: UIView {
         }
         
         sender.isSelected = true
+        
+        switch sender.tag {
+        case 0: onCategorySelected?(.combo)
+        case 1: onCategorySelected?(.popcorn)
+        case 2: onCategorySelected?(.snack)
+        case 3: onCategorySelected?(.drinks)
+        default: break
+        }
+        
     }
 }
 

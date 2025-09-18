@@ -7,7 +7,7 @@ import SnapKit
 class PaymentPopUp: UIView {
     
     // 임시방편 배열입니다.
-    var datas = ["가나디", "농담곰", "치이카와", "춘식이", "하치와레"]
+    //var datas = ["가나디", "농담곰", "치이카와", "춘식이", "하치와레"]
     let paymentPop = UIView()
     let cancelButton = UIButton()
     let payButton = UIButton()
@@ -18,9 +18,23 @@ class PaymentPopUp: UIView {
         super.init(frame: frame)
         mainConfigure()
         tableConfigure()
+        stackConfigure()
         setTableViewDelegate()
     }
     
+    struct ItemList {
+        let imageName: String
+        let name: String
+        let price: String
+    }
+    
+    var datas: [ItemList] = [
+        ItemList(imageName: "kioscornLogo_popcorn", name: "가나디", price: "16,500"),
+        ItemList(imageName: "kioscornLogo_popcorn", name: "농담곰", price: "16,500"),
+        ItemList(imageName: "kioscornLogo_popcorn", name: "치이카와", price: "16,500"),
+        ItemList(imageName: "kioscornLogo_popcorn", name: "춘식이", price: "16,500"),
+        ItemList(imageName: "kioscornLogo_popcorn", name: "하치와레", price: "16,500")
+    ]
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -74,7 +88,30 @@ class PaymentPopUp: UIView {
             return configuration
        }
     
-    
+    // 스택뷰 레이아웃
+     func stackConfigure() {
+         self.addSubview(stackView)
+         
+         stackView.axis = .vertical
+         stackView.spacing = 10
+         
+         stackView.snp.makeConstraints {
+             $0.leading.equalToSuperview().inset(26)
+             $0.trailing.equalToSuperview().offset(-26)
+             $0.top.equalTo(tableView.snp.bottom).offset(40)
+         }
+         
+         let total = UILabel()
+         let orderPrice = UILabel()
+         
+         total.text = "총 수량"
+         orderPrice.text = "결제 금액"
+         
+         stackView.addArrangedSubview(total)
+         stackView.addArrangedSubview(orderPrice)
+         orderPrice.textAlignment = .left
+     
+     }
     
     /*
      기본 레이아웃 설정
@@ -129,9 +166,10 @@ extension PaymentPopUp: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: OrderTableViewCell.identifier, for: indexPath) as? OrderTableViewCell
-            else { return.init() }
+            else { return OrderTableViewCell() }
         
         let data = datas[indexPath.row]
+        cell.itemImage.image = UIImage(named: "kioscornLogo_popcorn")
         cell.cellConfigure(data: data)
         return cell
     }

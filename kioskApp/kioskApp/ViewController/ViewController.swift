@@ -81,13 +81,13 @@ final class ViewController: UIViewController {
     // 결제창 하프모달뷰
     @objc func presentModalBtnTap(_ sender: UIButton) {
         let paySheetVC = PaymentPopUpViewController()
-    
+
+        // 현재 장바구니 전달
         paySheetVC.cartItems = self.cartItems
-        
-        //  모달 닫힐 때 onDismiss실행
-        paySheetVC.onDismiss = { [weak self] updateItem in
-            guard let self = self else { return }
-            self.cartItems = updateItem
+
+        // 모달 닫힐 때 장바구니 최신상태!!
+        paySheetVC.onDismiss = { [weak self] updatedItems in
+            self?.cartItems = updatedItems
         }
 
         paySheetVC.modalPresentationStyle = .pageSheet
@@ -97,9 +97,9 @@ final class ViewController: UIViewController {
             sheet.prefersGrabberVisible = true
         }
 
-        present(paySheetVC, animated: true, completion: nil)
+        present(paySheetVC, animated: true)
     }
-}
+
 
 extension ViewController: UICollectionViewDataSource, MenuItemCellDelegate {
     

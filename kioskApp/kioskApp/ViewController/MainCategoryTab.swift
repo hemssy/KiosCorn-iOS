@@ -20,7 +20,7 @@ class MainCategoryTab: UIView {
     
     private func configureUI() {
         // 로고 + 카테고리탭 백그라운드
-        backgroundView.backgroundColor = UIColor.white
+        backgroundView.backgroundColor = UIColor(named: "DefaultColor")
         addSubview(backgroundView)
         backgroundView.snp.makeConstraints {
             $0.edges.equalToSuperview()

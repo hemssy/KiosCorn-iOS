@@ -65,7 +65,7 @@ class PaymentPopUp: UIView {
     func tableConfigure() {
         addSubview(tableView)
         tableView.rowHeight = 85
-        tableView.backgroundColor = .white
+        tableView.backgroundColor = UIColor(named: "DefaultColor")
         tableView.layer.cornerRadius = 10
         tableView.snp.makeConstraints {
             $0.top.equalToSuperview().inset(30)
@@ -162,19 +162,19 @@ class PaymentPopUp: UIView {
         }
 
         cancelButton.setTitle("취소", for: .normal)
-        cancelButton.setTitleColor(.black, for: .normal)
-        cancelButton.backgroundColor = .white
+        cancelButton.setTitleColor(.label, for: .normal)
+        cancelButton.backgroundColor = UIColor(named: "DefaultColor")
         cancelButton.layer.cornerRadius = 8
         cancelButton.layer.borderWidth = 1
-        cancelButton.layer.borderColor = UIColor.black.cgColor
+        cancelButton.layer.borderColor = UIColor.separator.cgColor
         cancelButton.addTarget(self, action: #selector(cancelTapped), for: .touchUpInside)
 
         callStaffButton.setTitle("직원호출", for: .normal)
-        callStaffButton.setTitleColor(.black, for: .normal)
-        callStaffButton.backgroundColor = .white
+        callStaffButton.setTitleColor(.label, for: .normal)
+        callStaffButton.backgroundColor = UIColor(named: "DefaultColor")
         callStaffButton.layer.cornerRadius = 8
         callStaffButton.layer.borderWidth = 1
-        callStaffButton.layer.borderColor = UIColor.black.cgColor
+        callStaffButton.layer.borderColor = UIColor.separator.cgColor
 
         payButton.setTitle("결제", for: .normal)
         payButton.setTitleColor(.white, for: .normal)

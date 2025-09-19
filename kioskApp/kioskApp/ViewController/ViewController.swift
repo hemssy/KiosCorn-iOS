@@ -15,6 +15,16 @@ final class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        
+        // 다크모드 버튼 추가
+        let darkModeButton = UIBarButtonItem(
+            image: UIImage(systemName: "moon"),
+            style: .plain,
+            target: self,
+            action: #selector(toggleDarkMode)
+        )
+        darkModeButton.tintColor = .red
+        navigationItem.rightBarButtonItem = darkModeButton
 
         // 상단 카테고리 탭
         view.addSubview(mainCategoryTab)
@@ -94,6 +104,14 @@ final class ViewController: UIViewController {
             sheet.prefersGrabberVisible = true
         }
         present(paySheetVC, animated: true)
+    }
+    
+    @objc private func toggleDarkMode() {
+        if overrideUserInterfaceStyle == .dark {
+            overrideUserInterfaceStyle = .light
+        } else {
+            overrideUserInterfaceStyle = .dark
+        }
     }
 }
 

@@ -74,9 +74,9 @@ class OrderTableViewCell: UITableViewCell {
         [itemTitle, itemPrice]
             .forEach { cartStackview.addArrangedSubview($0) }
         
-        itemTitle.textColor = .black
+        itemTitle.textColor = .label
         itemTitle.font = UIFont.systemFont(ofSize: 15)
-        itemPrice.textColor = .black
+        itemPrice.textColor = .label
         itemPrice.font = UIFont.systemFont(ofSize: 14)
         cartStackview.axis = .vertical
         cartStackview.spacing = 13
@@ -98,14 +98,16 @@ class OrderTableViewCell: UITableViewCell {
         
         
         amount.text = "0"
-        amount.textColor = .black
+        amount.textColor = .label
+        
         minusButton.isEnabled = false
         minusButton.setTitle("-", for: .normal)
-        minusButton.setTitleColor(.black, for: .normal)      //  - 버튼 기본 상태
-        minusButton.setTitleColor(.lightGray, for: .disabled) // - 버튼 비활성화 상태
+        minusButton.setTitleColor(.label, for: .normal)
+        minusButton.setTitleColor(.lightGray, for: .disabled)
         minusButton.addTarget(self, action: #selector(minusTapped), for: .touchUpInside)
+        
         plusButton.setTitle("+", for: .normal)
-        plusButton.setTitleColor(.black, for: .normal)
+        plusButton.setTitleColor(.label, for: .normal)
         plusButton.addTarget(self, action: #selector(plusTapped), for: .touchUpInside)
         
         
@@ -121,7 +123,7 @@ class OrderTableViewCell: UITableViewCell {
         bg.layer.borderColor = UIColor.init(named: "StepperColor")?.cgColor
         bg.layer.borderWidth = 0.5
         bg.layer.masksToBounds = true
-        bg.backgroundColor = .white
+        bg.backgroundColor = UIColor(named: "DefaultColor")
         bg.layer.cornerCurve = .continuous
         bg.layer.cornerRadius = 15
         

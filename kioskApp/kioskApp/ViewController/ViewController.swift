@@ -2,7 +2,7 @@ import UIKit
 import SnapKit
 
 final class ViewController: UIViewController {
-
+    
     private let mainCategoryTab = MainCategoryTab()
     private let mainOrderButton = MainOrderButton()
     
@@ -11,12 +11,12 @@ final class ViewController: UIViewController {
     private var collectionView: UICollectionView!
     private let items = allItems
     private var filteredItems: [MenuItem] = [] //필터된 아이템을 따로 저장함
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         
-
+        
         // 상단 카테고리 탭
         view.addSubview(mainCategoryTab)
         mainCategoryTab.snp.makeConstraints { make in
@@ -34,7 +34,7 @@ final class ViewController: UIViewController {
         // 앱 처음 켜졌을 때 기본으로 콤보필터 끼고있음
         filteredItems = items.filter { $0.category == .combo }
         
-
+        
         // 하단 주문 버튼
         view.addSubview(mainOrderButton)
         mainOrderButton.configureButton(self)
@@ -43,7 +43,7 @@ final class ViewController: UIViewController {
             $0.bottom.equalToSuperview()
             $0.height.equalTo(63)
         }
-
+        
         // 컬렉션뷰
         let layout = UICollectionViewFlowLayout()
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -56,14 +56,14 @@ final class ViewController: UIViewController {
             $0.bottom.equalTo(mainOrderButton.snp.top)   // 버튼 위까지
         }
         collectionView.dataSource = self
-
+        
         
     }
-
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         guard let flow = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
-
+        
         // 피그마에서 정한 마진/간격 + 셀 비율(160x216)
         let insetLR: CGFloat = 29
         let inter: CGFloat   = 23
@@ -71,35 +71,35 @@ final class ViewController: UIViewController {
         let available = collectionView.bounds.width - insetLR*2 - inter
         let w = available / 2
         let h = w * (216.0 / 160.0)
-
+        
         flow.itemSize = CGSize(width: w, height: h)
         flow.minimumInteritemSpacing = inter
         flow.minimumLineSpacing = line
         flow.sectionInset = UIEdgeInsets(top: 12, left: insetLR, bottom: 24, right: insetLR)
     }
-
+    
     // 결제창 하프모달뷰
     @objc func presentModalBtnTap(_ sender: UIButton) {
         let paySheetVC = PaymentPopUpViewController()
-
+        
         // 현재 장바구니 전달
         paySheetVC.cartItems = self.cartItems
-
+        
         // 모달 닫힐 때 장바구니 최신상태!!
         paySheetVC.onDismiss = { [weak self] updatedItems in
             self?.cartItems = updatedItems
         }
-
+        
         paySheetVC.modalPresentationStyle = .pageSheet
         if let sheet = paySheetVC.sheetPresentationController {
             sheet.detents = [.medium()]
             sheet.preferredCornerRadius = 30
             sheet.prefersGrabberVisible = true
         }
-
+        
         present(paySheetVC, animated: true)
     }
-
+}
 
 extension ViewController: UICollectionViewDataSource, MenuItemCellDelegate {
     

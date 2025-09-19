@@ -6,8 +6,9 @@ class PaymentPopUp: UIView {
     // UIAlert 콜백
     var onDeleteAllTapped: (() -> Void)?                  // 주문취소
     var presentAlert: ((UIAlertController) -> Void)?
-    var emptyTapped: (() -> Void)?                        // 결제(빈주문)
+    var onPayTapped: ((Int) -> Void)?                        // 결제버튼 통합
 
+    
     // UI
     let paymentPop = UIView()
     let cancelButton = UIButton()
@@ -180,11 +181,12 @@ class PaymentPopUp: UIView {
         payButton.setTitleColor(.white, for: .normal)
         payButton.backgroundColor = UIColor(named: "PointColor")
         payButton.layer.cornerRadius = 8
-        payButton.addTarget(self, action: #selector(emptyOrderTapped), for: .touchUpInside)
+        payButton.addTarget(self, action: #selector(payButtonTapped), for: .touchUpInside)
     }
 
     @objc private func cancelTapped() { onDeleteAllTapped?() }
-    @objc private func emptyOrderTapped() { emptyTapped?() }
+    @objc private func payButtonTapped() { onPayTapped?(totalNumCount) }
+    
 
     private func updateSummary() {
         totalNumCount = datas.reduce(0) { $0 + $1.count }

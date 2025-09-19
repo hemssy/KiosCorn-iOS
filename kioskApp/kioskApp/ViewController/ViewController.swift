@@ -77,10 +77,11 @@ final class ViewController: UIViewController {
     // 결제창 하프모달뷰
     @objc func presentModalBtnTap(_ sender: UIButton) {
         let paySheet = UIViewController()
-
         let popUpView = PaymentPopUp()
         paySheet.view.addSubview(popUpView)
         popUpView.snp.makeConstraints { $0.edges.equalToSuperview() }
+        
+        popUpView.callStaffButton.addTarget(self, action: #selector(callStaffTapped), for: .touchUpInside)
 
         paySheet.modalPresentationStyle = .pageSheet
         if let sheet = paySheet.sheetPresentationController {
@@ -90,6 +91,18 @@ final class ViewController: UIViewController {
         }
 
         present(paySheet, animated: true, completion: nil)
+    }
+    
+    @objc private func callStaffTapped() {
+        let alert = UIAlertController(title: "직원을 호출하시겠습니까?",
+                                      message: nil,
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
+        alert.addAction(UIAlertAction(title: "호출", style: .default))
+        
+        // presentedViewController ?? self 로 최상단이 있으면 그 최상단에 올리고, 없으면 self에서 띄우도록만든다. 지금 최상단은 장바구니 모달이니까 거기에 올리는거임
+        let presenter = self.presentedViewController ?? self
+        presenter.present(alert, animated: true)
     }
 }
 

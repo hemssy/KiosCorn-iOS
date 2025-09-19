@@ -5,7 +5,7 @@ class PaymentPopUp: UIView {
 
     // UIAlert 콜백
     var onDeleteAllTapped: (() -> Void)?                  // 주문취소
-    var presentAlert: ((UIAlertController) -> Void)?
+    var maxOrderTapped: ((UIAlertController) -> Void)?
     var emptyTapped: (() -> Void)?                        // 결제(빈주문)
 
     // UI
@@ -226,8 +226,8 @@ extension PaymentPopUp: UITableViewDataSource, UITableViewDelegate {
         cell.cellConfigure(data: data)
 
         // 셀 → 팝업뷰 → VC 알럿 전달
-        cell.onOrderAlert = { [weak self] alert in
-            self?.presentAlert?(alert)
+        cell.maxOrderTapped = { [weak self] alert in
+            self?.maxOrderTapped?(alert)
         }
 
         // 수량 변경 시 합계 갱신

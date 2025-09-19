@@ -20,7 +20,7 @@ final class PaymentPopUpViewController: UIViewController {
         popUpView.callStaffButton.addTarget(self, action: #selector(didTapCallStaff), for: .touchUpInside)
 
         // 수량제한 알럿
-        popUpView.presentAlert = { [weak self] alert in
+        popUpView.maxOrderTapped = { [weak self] alert in
             self?.present(alert, animated: true)
         }
 

@@ -6,7 +6,7 @@ class OrderTableViewCell: UITableViewCell {
     
     // UIAlertController용 콜백 (취소버튼/최대수량/주문내역 공백)
     var onCountChanged: ((Int) -> Void)?
-    var onOrderAlert: ((UIAlertController) -> Void)?
+    var maxOrderTapped: ((UIAlertController) -> Void)?
     var emptyAlert: (() -> Void)?
     
     
@@ -156,7 +156,7 @@ class OrderTableViewCell: UITableViewCell {
             orderAlert.addAction(UIAlertAction(title: "확인", style: .default))
             orderAlert.addAction(UIAlertAction(title: "취소", style: .cancel))
             
-            onOrderAlert?(orderAlert)
+            maxOrderTapped?(orderAlert)
             return
             
         } else {

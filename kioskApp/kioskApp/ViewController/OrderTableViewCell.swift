@@ -3,7 +3,13 @@ import SnapKit
 
 class OrderTableViewCell: UITableViewCell {
     static let identifier = "OrderTableViewCell"
+    
+    // UIAlertController용 콜백 (취소버튼/최대수량/주문내역 공백)
     var onCountChanged: ((Int) -> Void)?
+    var onOrderAlert: ((UIAlertController) -> Void)?
+    var emptyAlert: (() -> Void)?
+    
+    
     var count: Int = 0 {
         didSet {
             amount.text = "\(count)"
@@ -31,8 +37,6 @@ class OrderTableViewCell: UITableViewCell {
         counterUI()
         
     }
-    
-    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -63,7 +67,7 @@ class OrderTableViewCell: UITableViewCell {
         itemImage.contentMode = .scaleAspectFit
         itemImage.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
         imageStackview.axis = .horizontal
-       
+        
         
         // 장바구니 수직뷰 (제품명, 제품가격)
         contentView.addSubview(cartStackview)
@@ -83,7 +87,7 @@ class OrderTableViewCell: UITableViewCell {
         }
     }
     
-
+    
     
     // 수량 카운팅 STEPPER
     func counterUI() {
@@ -105,7 +109,7 @@ class OrderTableViewCell: UITableViewCell {
         plusButton.addTarget(self, action: #selector(plusTapped), for: .touchUpInside)
         
         
-       
+        
         
         bg.snp.makeConstraints {
             $0.edges.equalToSuperview()
@@ -120,7 +124,7 @@ class OrderTableViewCell: UITableViewCell {
         bg.backgroundColor = .white
         bg.layer.cornerCurve = .continuous
         bg.layer.cornerRadius = 15
-
+        
         
         
         countStackView.backgroundColor = .clear
@@ -143,20 +147,27 @@ class OrderTableViewCell: UITableViewCell {
     }
     
     
-    // 버튼 작동 함수 및 간단한 예외처리
+    // 최대 주문 수량 알림창
     @objc func plusTapped() {
-        count += 1
-        if count > 10 {
-            amount.text = "0"
+        if count >= 10 {
+            amount.text = "\(count)"
+            let orderAlert = UIAlertController(title: "알림", message: "10개 이상은 주문할 수 없습니다.", preferredStyle: .alert)
+            orderAlert.addAction(UIAlertAction(title: "확인", style: .default))
+            orderAlert.addAction(UIAlertAction(title: "취소", style: .cancel))
+            
+            onOrderAlert?(orderAlert)
+            return
+            
         } else {
-            print("+ 눌림")
+            count += 1
             amount.text = "\(count)"
             onCountChanged?(count)
         }
-
+        
     }
     
     @objc func minusTapped() {
+        guard count > 0 else { return }
         count -= 1
         amount.text = "\(count)"
         onCountChanged?(count)

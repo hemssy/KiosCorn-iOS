@@ -6,6 +6,11 @@ import SnapKit
 
 class PaymentPopUp: UIView {
     
+    // UIAlertController용 콜백 (취소버튼/최대수량/주문내역 공백)
+    var onDeleteAllTapped: (() -> Void)?
+    var presentAlert: ((UIAlertController) -> Void)?
+    var emptyTapped: (() -> Void)?
+    
     let paymentPop = UIView()
     let cancelButton = UIButton()
     let callStaffButton = UIButton()
@@ -37,6 +42,8 @@ class PaymentPopUp: UIView {
         var count: Int
     }
     
+    
+    // 임시 배열
     var datas: [ItemList] = [
         ItemList(imageName: "kioscornLogo_popcorn", name: "가나디", price: 16500, count: 0),
         ItemList(imageName: "kioscornLogo_popcorn", name: "농담곰", price: 16500, count: 0),
@@ -53,7 +60,13 @@ class PaymentPopUp: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // 테이블뷰 레이아웃
+    // 테이블뷰 배열이 비어있는지 확인
+    var hasNoOrder: Bool {
+        return datas.isEmpty || datas.allSatisfy { $0.count == 0 }
+    }
+    
+    
+    // [테이블뷰] 레이아웃
     func tableConfigure() {
         addSubview(tableView)
         
@@ -75,7 +88,8 @@ class PaymentPopUp: UIView {
         tableView.delegate = self
     }
     
-    // 스와이프 삭제
+    
+    // [테이블뷰] 스와이프하여 삭제
     func tableView(_ tableView: UITableView,
                    trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath)
     -> UISwipeActionsConfiguration? {
@@ -90,6 +104,7 @@ class PaymentPopUp: UIView {
         return UISwipeActionsConfiguration(actions: [action])
     }
     
+    
     // 수량 / 가격 스택뷰
     func stackConfigure() {
         addSubview(hStackView)
@@ -101,6 +116,7 @@ class PaymentPopUp: UIView {
             $0.top.equalTo(tableView.snp.bottom).offset(24)
             $0.leading.trailing.equalToSuperview().inset(26)
         }
+        
         
         // 왼쪽 타이틀
         let total = UILabel()
@@ -120,7 +136,7 @@ class PaymentPopUp: UIView {
         totalCount.font = .systemFont(ofSize: 16, weight: .bold)
         totalCount.textAlignment = .right
         
-        totalPrice.text = "₩0"
+        totalPrice.text = "₩ 0"
         totalPrice.font = .systemFont(ofSize: 16, weight: .bold)
         totalPrice.textAlignment = .right
         
@@ -135,6 +151,7 @@ class PaymentPopUp: UIView {
         titleStack.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         valueStack.setContentHuggingPriority(.required, for: .horizontal)
     }
+    
     
     // 메인 레이아웃 (버튼 바)
     func mainConfigure() {
@@ -163,6 +180,7 @@ class PaymentPopUp: UIView {
         cancelButton.layer.cornerRadius = 8
         cancelButton.layer.borderWidth = 1
         cancelButton.layer.borderColor = UIColor.black.cgColor
+        cancelButton.addTarget(self, action: #selector(cancelTapped), for: .touchUpInside)
         
         callStaffButton.setTitle("직원호출", for: .normal)
         callStaffButton.setTitleColor(.black, for: .normal)
@@ -175,13 +193,27 @@ class PaymentPopUp: UIView {
         payButton.setTitleColor(.white, for: .normal)
         payButton.backgroundColor = UIColor(named: "PointColor")
         payButton.layer.cornerRadius = 8
+        payButton.addTarget(self, action: #selector(emptyOrderTapped), for: .touchUpInside)
+        
     }
+    
+    
+    // 콜백 선언
+    @objc private func cancelTapped() {
+        onDeleteAllTapped?()
+    }
+    
+    @objc private func emptyOrderTapped() {
+        emptyTapped?()
+    }
+    
+    
     
     // 합계 갱신
     private func updateSummary() {
         totalNumCount = datas.reduce(0) { $0 + $1.count }
         let sum = datas.reduce(0) { $0 + ($1.price * $1.count) }
-        totalPrice.text = "₩\(formatPrice(sum))"
+        totalPrice.text = "₩ \(formatPrice(sum))"
     }
     
     func formatPrice(_ price: Int) -> String {
@@ -191,21 +223,24 @@ class PaymentPopUp: UIView {
     }
 }
 
+
+// 테이블뷰 delegate
 extension PaymentPopUp: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return datas.count
     }
     
-    func tableView(_ tableView: UITableView,
-                   cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: OrderTableViewCell.identifier,
-            for: indexPath
-        ) as? OrderTableViewCell else { return OrderTableViewCell() }
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: OrderTableViewCell.identifier, for: indexPath)
+                as? OrderTableViewCell else { return OrderTableViewCell() }
         
         let data = datas[indexPath.row]
         cell.itemImage.image = UIImage(named: data.imageName)
         cell.cellConfigure(data: data)
+        
+        cell.onOrderAlert = { [weak self] orderAlert in
+            self?.presentAlert?(orderAlert)
+        }
         
         cell.onCountChanged = { [weak self] newCount in
             guard let self = self else { return }

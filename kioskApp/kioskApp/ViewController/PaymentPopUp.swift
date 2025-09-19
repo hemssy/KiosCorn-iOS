@@ -46,7 +46,8 @@ class PaymentPopUp: UIView {
     }
 
     private var totalNumCount = 0 {
-        didSet { totalCount.text = "\(totalNumCount)" }
+        didSet { totalCount.text = "\(totalNumCount)"
+        }
     }
     
     required init?(coder: NSCoder) {

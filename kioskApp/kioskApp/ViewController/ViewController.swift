@@ -19,9 +19,9 @@ final class ViewController: UIViewController {
         
         // 상단 카테고리 탭
         view.addSubview(mainCategoryTab)
-        mainCategoryTab.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview()
-            make.height.equalTo(150)
+        mainCategoryTab.snp.makeConstraints {
+            $0.top.leading.trailing.equalToSuperview()
+            $0.height.equalTo(150)
         }
         
         // 카테고리 버튼 눌렸을 때 동작 연결
@@ -88,6 +88,7 @@ final class ViewController: UIViewController {
         // 모달 닫힐 때 장바구니 최신상태!!
         paySheetVC.onDismiss = { [weak self] updatedItems in
             self?.cartItems = updatedItems
+            self?.updateOrderButton()
         }
         
         paySheetVC.modalPresentationStyle = .pageSheet
@@ -126,9 +127,14 @@ extension ViewController: UICollectionViewDataSource, MenuItemCellDelegate {
             let newItem = PaymentPopUp.ItemList(menuItem: item, count: 1)
             self.cartItems.append(newItem)
         }
+        self.updateOrderButton()
         
     }
-    
+    // 총 수량 주문하기 버튼에 추가
+    func updateOrderButton() {
+        let totalCount = self.cartItems.reduce(0) { $0 + $1.count }
+        mainOrderButton.setTitle(count: totalCount)
+    }
     
 }
 

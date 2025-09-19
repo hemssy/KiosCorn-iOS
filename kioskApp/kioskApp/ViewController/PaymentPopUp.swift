@@ -5,6 +5,7 @@ import UIKit
 import SnapKit
 
 class PaymentPopUp: UIView {
+
     
     let paymentPop = UIView()
     let cancelButton = UIButton()
@@ -22,6 +23,8 @@ class PaymentPopUp: UIView {
     // 버튼 바 (취소/직원호출/결제)
     let buttonBar = UIStackView()
     
+    var onDismiss: (([ItemList]) -> Void)?
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         tableConfigure()
@@ -29,22 +32,19 @@ class PaymentPopUp: UIView {
         mainConfigure()
         setTableViewDelegate()
     }
-    
+    // 임시 데이터 수정
     struct ItemList {
-        let imageName: String
-        let name: String
-        var price: Int
+        let menuItem: MenuItem
         var count: Int
     }
     
-    var datas: [ItemList] = [
-        ItemList(imageName: "kioscornLogo_popcorn", name: "가나디", price: 16500, count: 0),
-        ItemList(imageName: "kioscornLogo_popcorn", name: "농담곰", price: 16500, count: 0),
-        ItemList(imageName: "kioscornLogo_popcorn", name: "치이카와", price: 16500, count: 0),
-        ItemList(imageName: "kioscornLogo_popcorn", name: "춘식이", price: 16500, count: 0),
-        ItemList(imageName: "kioscornLogo_popcorn", name: "하치와레", price: 16500, count: 0)
-    ]
-    
+    var datas: [ItemList] = [] {
+        didSet {
+            updateSummary()
+            tableView.reloadData()
+        }
+    }
+
     private var totalNumCount = 0 {
         didSet { totalCount.text = "\(totalNumCount)" }
     }
@@ -81,14 +81,21 @@ class PaymentPopUp: UIView {
     -> UISwipeActionsConfiguration? {
         let action = UIContextualAction(style: .destructive, title: nil) { [weak self] _, _, completion in
             guard let self = self else { return }
-            self.datas.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .automatic)
-            self.updateSummary()
-            completion(true)
+            // 테이블뷰 삭제 수정
+            tableView.performBatchUpdates({
+                self.datas.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .automatic)
+            }, completion: { _ in
+                self.updateSummary()
+                completion(true)
+            })
+
         }
         action.image = UIImage(systemName: "trash")
         return UISwipeActionsConfiguration(actions: [action])
+        
     }
+        
     
     // 수량 / 가격 스택뷰
     func stackConfigure() {
@@ -180,7 +187,7 @@ class PaymentPopUp: UIView {
     // 합계 갱신
     private func updateSummary() {
         totalNumCount = datas.reduce(0) { $0 + $1.count }
-        let sum = datas.reduce(0) { $0 + ($1.price * $1.count) }
+        let sum = datas.reduce(0) { $0 + ($1.menuItem.price * $1.count) }
         totalPrice.text = "₩\(formatPrice(sum))"
     }
     
@@ -189,6 +196,16 @@ class PaymentPopUp: UIView {
         formatter.numberStyle = .decimal
         return formatter.string(from: NSNumber(value: price)) ?? "\(price)"
     }
+    // 메뉴 데이터 추가, 같은 아이템 있으면 수량 1개 추가
+    func addMenuItem(_ item: MenuItem) {
+        if let index = datas.firstIndex(where: { $0.menuItem.id == item.id }) {
+            datas[index].count += 1
+        } else {
+            let newItem = ItemList(menuItem: item, count: 1)
+            datas.append(newItem)
+        }
+    }
+    
 }
 
 extension PaymentPopUp: UITableViewDataSource, UITableViewDelegate {
@@ -204,7 +221,7 @@ extension PaymentPopUp: UITableViewDataSource, UITableViewDelegate {
         ) as? OrderTableViewCell else { return OrderTableViewCell() }
         
         let data = datas[indexPath.row]
-        cell.itemImage.image = UIImage(named: data.imageName)
+        cell.itemImage.image = UIImage(named: data.menuItem.imageName)
         cell.cellConfigure(data: data)
         
         cell.onCountChanged = { [weak self] newCount in
@@ -214,5 +231,6 @@ extension PaymentPopUp: UITableViewDataSource, UITableViewDelegate {
         }
         return cell
     }
+
 }
 

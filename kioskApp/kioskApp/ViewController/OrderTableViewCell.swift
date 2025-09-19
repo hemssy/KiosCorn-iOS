@@ -137,9 +137,10 @@ class OrderTableViewCell: UITableViewCell {
     
     
     func cellConfigure(data: PaymentPopUp.ItemList) {
-        itemImage.image = UIImage(named: data.imageName)
-        itemTitle.text = data.name
-        itemPrice.text = "\(data.price)원"
+        self.count = data.count
+        itemImage.image = UIImage(named: data.menuItem.imageName)
+        itemTitle.text = data.menuItem.name
+        itemPrice.text = "\(data.menuItem.price)원"
     }
     
     

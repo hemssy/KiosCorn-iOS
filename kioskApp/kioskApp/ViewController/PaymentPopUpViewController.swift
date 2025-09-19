@@ -19,7 +19,7 @@ final class PaymentPopUpViewController: UIViewController {
         // 직원 호출 알럿
         popUpView.callStaffButton.addTarget(self, action: #selector(didTapCallStaff), for: .touchUpInside)
         
-        // 수량제한 알럿
+        // 수량제한 알럿 (셀 -> 팝업뷰 -> VC)
         popUpView.maxOrderTapped = { [weak self] alert in
             self?.present(alert, animated: true)
         }
@@ -39,28 +39,29 @@ final class PaymentPopUpViewController: UIViewController {
             alert.addAction(UIAlertAction(title: "아니오", style: .cancel))
             self.present(alert, animated: true)
         }
+
+        // 빈 주문 알럿
+        popUpView.emptyTapped = { [weak self] in
+            let emptyAlert = UIAlertController(
+                title: "알림",
+                message: "주문내역이 없습니다.",
+                preferredStyle: .alert
+            )
+            emptyAlert.addAction(UIAlertAction(title: "확인", style: .default))
+            self?.present(emptyAlert, animated: true)
+        }
         
         // 결제버튼 알림
         popUpView.onPayTapped = { [weak self] count in
             guard let self = self else { return }
             
-            if count > 0 {
-                let payAlert = UIAlertController(
-                    title: "알림",
-                    message: "결제가 완료되었습니다",
-                    preferredStyle: .alert)
-                payAlert.addAction(UIAlertAction(title: "확인", style: .default))
-                self.present(payAlert, animated: true)
-            } else {
-                guard self.popUpView.hasNoOrder else { return }
-                let emptyalert = UIAlertController(
-                    title: "알림",
-                    message: "주문내역이 없습니다.",
-                    preferredStyle: .alert
-                )
-                emptyalert.addAction(UIAlertAction(title: "확인", style: .default))
-                self.present(emptyalert, animated: true)
-            }
+            let payAlert = UIAlertController(
+                title: "알림",
+                message: "결제가 완료되었습니다",
+                preferredStyle: .alert
+            )
+            payAlert.addAction(UIAlertAction(title: "확인", style: .default))
+            self.present(payAlert, animated: true)
         }
     }
 

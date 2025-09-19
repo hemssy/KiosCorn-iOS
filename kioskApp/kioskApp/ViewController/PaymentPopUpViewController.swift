@@ -15,15 +15,15 @@ final class PaymentPopUpViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view = popUpView
-
+        
         // 직원 호출 알럿
         popUpView.callStaffButton.addTarget(self, action: #selector(didTapCallStaff), for: .touchUpInside)
-
+        
         // 수량제한 알럿
         popUpView.maxOrderTapped = { [weak self] alert in
             self?.present(alert, animated: true)
         }
-
+        
         // 주문취소 알럿
         popUpView.onDeleteAllTapped = { [weak self] in
             guard let self = self else { return }
@@ -39,18 +39,28 @@ final class PaymentPopUpViewController: UIViewController {
             alert.addAction(UIAlertAction(title: "아니오", style: .cancel))
             self.present(alert, animated: true)
         }
-
-        // 주문내역없습니다 알럿
-        popUpView.emptyTapped = { [weak self] in
+        
+        // 결제버튼 알림
+        popUpView.onPayTapped = { [weak self] count in
             guard let self = self else { return }
-            guard self.popUpView.hasNoOrder else { return }
-            let alert = UIAlertController(
-                title: "알림",
-                message: "주문내역이 없습니다.",
-                preferredStyle: .alert
-            )
-            alert.addAction(UIAlertAction(title: "확인", style: .default))
-            self.present(alert, animated: true)
+            
+            if count > 0 {
+                let payAlert = UIAlertController(
+                    title: "알림",
+                    message: "결제가 완료되었습니다",
+                    preferredStyle: .alert)
+                payAlert.addAction(UIAlertAction(title: "확인", style: .default))
+                self.present(payAlert, animated: true)
+            } else {
+                guard self.popUpView.hasNoOrder else { return }
+                let emptyalert = UIAlertController(
+                    title: "알림",
+                    message: "주문내역이 없습니다.",
+                    preferredStyle: .alert
+                )
+                emptyalert.addAction(UIAlertAction(title: "확인", style: .default))
+                self.present(emptyalert, animated: true)
+            }
         }
     }
 

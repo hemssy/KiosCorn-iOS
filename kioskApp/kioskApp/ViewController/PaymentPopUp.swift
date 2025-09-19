@@ -3,30 +3,36 @@ import SnapKit
 
 class PaymentPopUp: UIView {
 
-    // UIAlert 콜백
-    var onDeleteAllTapped: (() -> Void)?                  // 주문취소
-    var maxOrderTapped: ((UIAlertController) -> Void)?
-    var emptyTapped: (() -> Void)?                        // 결제(빈주문)
+    var onDeleteAllTapped: (() -> Void)?
 
-    // UI
+    var onPayTapped: ((Int) -> Void)?
+
+    var presentAlert: ((UIAlertController) -> Void)?
+
+    var maxOrderTapped: ((UIAlertController) -> Void)?
+
+    var emptyTapped: (() -> Void)?
+
+
     let paymentPop = UIView()
     let cancelButton = UIButton()
     let callStaffButton = UIButton()
     let payButton = UIButton()
     let tableView = UITableView()
 
-    // 합계 UI
+
     let titleStack = UIStackView()
     let valueStack = UIStackView()
     let totalCount = UILabel()
     let totalPrice = UILabel()
     let hStackView = UIStackView()
 
-    // 버튼 바
+
     let buttonBar = UIStackView()
 
-    // 외부에 최신 장바구니를 전달할 때 쓰는 용도임(VC에서 사용)
+
     var onDismiss: (([ItemList]) -> Void)?
+
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -38,13 +44,12 @@ class PaymentPopUp: UIView {
 
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
-    // 장바구니 아이템
+
     struct ItemList {
         let menuItem: MenuItem
         var count: Int
     }
 
-    // 데이터
     var datas: [ItemList] = [] {
         didSet {
             updateSummary()
@@ -53,8 +58,7 @@ class PaymentPopUp: UIView {
     }
 
     private var totalNumCount = 0 {
-        didSet { totalCount.text = "\(totalNumCount)"
-        }
+        didSet { totalCount.text = "\(totalNumCount)" }
     }
 
     var hasNoOrder: Bool {
@@ -80,7 +84,7 @@ class PaymentPopUp: UIView {
         tableView.delegate = self
     }
 
-    // 스와이프 삭제
+
     func tableView(_ tableView: UITableView,
                    trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath)
     -> UISwipeActionsConfiguration? {
@@ -98,7 +102,7 @@ class PaymentPopUp: UIView {
         return UISwipeActionsConfiguration(actions: [action])
     }
 
-    // 합계/금액 스택
+
     func stackConfigure() {
         addSubview(hStackView)
         hStackView.axis = .horizontal
@@ -141,7 +145,6 @@ class PaymentPopUp: UIView {
         valueStack.setContentHuggingPriority(.required, for: .horizontal)
     }
 
-    // 메인 레이아웃(버튼바)
     func mainConfigure() {
         [paymentPop, buttonBar].forEach { addSubview($0) }
         paymentPop.backgroundColor = UIColor(named: "DefaultColor")
@@ -175,16 +178,37 @@ class PaymentPopUp: UIView {
         callStaffButton.layer.cornerRadius = 8
         callStaffButton.layer.borderWidth = 1
         callStaffButton.layer.borderColor = UIColor.separator.cgColor
+        callStaffButton.addTarget(self, action: #selector(callStaffTapped), for: .touchUpInside)
 
         payButton.setTitle("결제", for: .normal)
         payButton.setTitleColor(.white, for: .normal)
         payButton.backgroundColor = UIColor(named: "PointColor")
         payButton.layer.cornerRadius = 8
-        payButton.addTarget(self, action: #selector(emptyOrderTapped), for: .touchUpInside)
+        payButton.addTarget(self, action: #selector(payButtonTapped), for: .touchUpInside)
     }
 
-    @objc private func cancelTapped() { onDeleteAllTapped?() }
-    @objc private func emptyOrderTapped() { emptyTapped?() }
+
+    @objc private func cancelTapped() {
+        onDeleteAllTapped?()
+    }
+
+    @objc private func callStaffTapped() {
+        let alert = UIAlertController(title: "직원을 호출하시겠습니까?",
+                                      message: nil,
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "호출", style: .default, handler: nil))
+        presentAlert?(alert)   
+    }
+
+    @objc private func payButtonTapped() {
+        if hasNoOrder {
+            emptyTapped?()
+            return
+        }
+        onPayTapped?(totalNumCount)
+    }
+
 
     private func updateSummary() {
         totalNumCount = datas.reduce(0) { $0 + $1.count }

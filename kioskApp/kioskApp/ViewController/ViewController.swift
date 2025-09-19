@@ -98,7 +98,6 @@ final class ViewController: UIViewController {
 }
 
 
-// MARK: - DataSource & Cell Delegate
 extension ViewController: UICollectionViewDataSource, MenuItemCellDelegate {
 
     func collectionView(_ cv: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -120,11 +119,11 @@ extension ViewController: UICollectionViewDataSource, MenuItemCellDelegate {
         } else {
             cartItems.append(.init(menuItem: item, count: 1))
         }
-        // ✅ 담은 뒤, 하단 주문 버튼에 총 수량 반영
+        // 담은 뒤, 하단 주문 버튼에 총 수량 반영
         self.updateOrderButton()
     }
 
-    // ✅ 총 수량을 하단 주문 버튼 타이틀에 반영
+    // 총 수량을 하단 주문 버튼 타이틀에 반영
     func updateOrderButton() {
         let totalCount = self.cartItems.reduce(0) { $0 + $1.count }
         mainOrderButton.setTitle(count: totalCount)

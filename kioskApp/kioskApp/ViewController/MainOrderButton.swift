@@ -25,8 +25,8 @@ class MainOrderButton: UIView {
         orderButton.setTitle("🍿2개 주문하기", for: .normal)
         orderButton.setTitleColor(.black, for: .normal)
         orderButton.addTarget(vc,  action: #selector(ViewController.presentModalBtnTap), for: .touchUpInside)
-        orderButton.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+        orderButton.snp.makeConstraints {
+            $0.edges.equalToSuperview()
         }
 
     }

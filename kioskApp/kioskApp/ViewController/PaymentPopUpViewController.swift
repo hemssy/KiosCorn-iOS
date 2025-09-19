@@ -49,10 +49,7 @@ final class PaymentPopUpViewController: UIViewController {
                     title: "알림",
                     message: "결제가 완료되었습니다",
                     preferredStyle: .alert)
-                payAlert.addAction(UIAlertAction(title: "확인", style: .default) { _ in
-                    self.popUpView.datas.removeAll()
-                    self.popUpView.tableView.reloadData()
-                })
+                payAlert.addAction(UIAlertAction(title: "확인", style: .default))
                 self.present(payAlert, animated: true)
             } else {
                 guard self.popUpView.hasNoOrder else { return }

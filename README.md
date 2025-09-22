@@ -1,5 +1,4 @@
 # 키오스콘-iOS
-<img src="https://img.shields.io/badge/Swift-F05138.svg?style=for-the-badge&logo=swift&logoColor=white"> <img src="https://img.shields.io/badge/Xcode-1575F9.svg?style=for-the-badge&logo=Xcode&logoColor=white">
 
 ## 프로젝트 소개
 **키오스콘**은 키오스크와 팝콘의 합성어로, 팝콘을 판매하는 **영화관 매점 키오스크 UI**를 재현한 **키오스크 앱**입니다.
@@ -28,10 +27,25 @@
 
 ---
 
-## 📦 Libraries
-| Library | Version | Description |
-|:-----:|:-----:|:-----:|
-| [**SnapKit**](https://github.com/SnapKit/SnapKit) | 5.7.1 | UI AutoLayout을 잡을 때 사용 |
+## Stacks 🐈
+### Environment
+<img src="https://img.shields.io/badge/Xcode-1575F9.svg?style=for-the-badge&logo=Xcode&logoColor=white"> <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"> <img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white">
+
+### Development
+<img src="https://img.shields.io/badge/Swift-F05138.svg?style=for-the-badge&logo=swift&logoColor=white">   
+
+### OS
+<img src="https://img.shields.io/badge/iOS-000000.svg?style=for-the-badge&logo=apple&logoColor=white">
+
+### Communication
+<img src="https://img.shields.io/badge/slack-4A154B?style=for-the-badge&logo=slack&logoColor=white"> <img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white"> 
+
+### Libraries
+[![SnapKit 5.7.1](https://img.shields.io/badge/SnapKit-5.7.1-0A99E2?style=for-the-badge&logo=data:image/svg+xml;base64,여기에인코딩된문자열&logoColor=white)](https://github.com/SnapKit/SnapKit)
+
+
+
+
 
 <br>
 
@@ -48,7 +62,13 @@
 ## 🙌 Git Convention
 
 ### Git-flow 전략
-```
+<div align="center">
+<img width="600" height="800" alt="깃플로우그림" src="https://github.com/user-attachments/assets/7f9da56c-f476-47e1-bf4b-2dd98b635fcb" />
+</div>
+
+<br>
+
+
 1. 작업할 내용에 대해서 이슈를 생성하고 이슈번호를 확인한다.
 2. 나의 로컬에서 develop 브랜치가 최신화 되어있는지 확인한다.
 3. develop 브랜치에서 새로운 이슈 브랜치를 생성한다.
@@ -61,7 +81,7 @@
 6. PR을 작성한다.
 7. 코드리뷰 후 수정사항 반영한 뒤, develop 브랜치에 merge 한다.
 8. 머지 이후, 작업했던 브랜치는 삭제한다.
-```
+
 <br>
 
 ### 커밋타입

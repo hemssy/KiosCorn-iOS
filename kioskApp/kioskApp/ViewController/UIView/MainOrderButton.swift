@@ -34,7 +34,7 @@ class MainOrderButton: UIView {
     
     func setTitle(count: Int) {
         
-        let fullText = NSMutableAttributedString(string: "🍿" + "\(count)" + "개 주문하기")
+        let fullText = NSMutableAttributedString(string: "🍿" + "주문하기")
         
         guard let countTextColor = UIColor(named: "PointColor") else {
             orderButton.setAttributedTitle(fullText, for: .normal)

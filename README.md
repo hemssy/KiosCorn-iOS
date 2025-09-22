@@ -3,7 +3,12 @@
 ## 프로젝트 소개
 **키오스콘**은 키오스크와 팝콘의 합성어로, 팝콘을 판매하는 **영화관 매점 키오스크 UI**를 재현한 **키오스크 앱**입니다.
 
----
+<div align="center">
+<img width="800" height="1000" alt="image" src="https://github.com/user-attachments/assets/b73e2bd0-9741-48af-af1d-145a7a098627" />
+</div>
+
+<br>
+
 **Project Topic**: 한 페이지 안에 모바일 키오스크 구현하기
 
 **Project Name**: 키오스콘

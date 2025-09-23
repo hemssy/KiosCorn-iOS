@@ -4,8 +4,8 @@
 **키오스콘**은 키오스크와 팝콘의 합성어로, 팝콘을 판매하는 **영화관 매점 키오스크 UI**를 재현한 **키오스크 앱**입니다.
 
 <div align="center">
-
-![image 2](https://github.com/user-attachments/assets/9ba689fc-425e-46bb-ba00-19a3d0d3727f)
+    
+<img width="2000" height="1500" alt="스크린샷 2025-09-23 오후 8 28 13" src="https://github.com/user-attachments/assets/e04f791b-fe07-4019-a072-b2aab4561003" />
 
 </div>
 

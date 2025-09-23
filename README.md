@@ -30,7 +30,21 @@
 <br>
 
 ---
-## 실행 화면
+## 📱구동화면
+
+<div align="center">
+    
+|`런치스크린`|`장바구니담기 & 수량조절`|`직원호출 Alert`|
+|-------|-------|-------|
+|<img src="https://github.com/user-attachments/assets/73471e55-a3e9-4cd4-8e93-f40ba7544742" width="143" height="300">|<img src="https://github.com/user-attachments/assets/ee218fae-bc21-4a16-9f20-426e44cc20a8" width="143" height="300">|<img src="https://github.com/user-attachments/assets/e2a12791-a488-4bed-be1d-00f15c0b86db" width="143" height="300">| <img src="https://github.com/user-attachments/assets/bb13fa45-5e75-4dce-9095-8266be0712a9" width="143" height="300">|<img src="https://github.com/user-attachments/assets/df4f3a1e-7117-4715-a60b-fe12c164fcd5" width="143" height="300">|<img src="https://github.com/user-attachments/assets/bc243ea2-0dd5-4aad-bc0b-53cbc8ff1664" width="143" height="300">|
+
+
+
+|`주문 전체취소`|`결제 Alert`|`다크모드 전환`|
+|-------|-------|-------|
+|<img src="https://github.com/user-attachments/assets/bb13fa45-5e75-4dce-9095-8266be0712a9" width="143" height="300">|<img src="https://github.com/user-attachments/assets/df4f3a1e-7117-4715-a60b-fe12c164fcd5" width="143" height="300">|<img src="https://github.com/user-attachments/assets/bc243ea2-0dd5-4aad-bc0b-53cbc8ff1664" width="143" height="300">|
+
+</div>
 
 ---
 

@@ -69,9 +69,31 @@
 ## 🙌 Git Convention
 
 ### Git-flow 전략
-<div align="center">
-<img width="600" height="800" alt="깃플로우그림" src="https://github.com/user-attachments/assets/7f9da56c-f476-47e1-bf4b-2dd98b635fcb" />
-</div>
+
+```mermaid
+gitGraph
+    commit id: "main-init" tag: "v0.1"
+
+    %% develop 브랜치 시작
+    branch develop
+    checkout develop
+    commit id: "start-develop"
+
+    %% feature 작업 (반복 구조를 ... 으로 표시)
+    branch feature
+    checkout feature
+    commit id: "feature-work"
+    checkout develop
+    merge feature
+    commit id: "..."
+    commit id: "..."
+
+    %% 최종 릴리스
+    checkout main
+    merge develop
+    commit id: "release" tag: "v1.0"
+
+```
 
 <br>
 

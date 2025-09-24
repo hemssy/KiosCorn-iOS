@@ -102,10 +102,11 @@ gitGraph
     commit id: "..."
     commit id: "..."
 
-    %% 최종 릴리스
+    %% 최종 릴리스 (release 단어 제거)
     checkout main
     merge develop
-    commit id: "release" tag: "v1.0"
+    commit id: "v1.0" tag: "v1.0"
+
 
 ```
 
